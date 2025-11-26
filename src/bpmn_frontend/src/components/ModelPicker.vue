@@ -33,7 +33,7 @@ const Models = Object.freeze({
   GPT_4_1: 'gpt-4.1',
   SONNET_4_5: 'claude-sonnet-4-5-20250929',
   OPUS_4_1: 'claude-opus-4-1-20250805',
-  GEMINI_2_5_PRO: 'gemini/gemini-2.5-pro',
+  GEMINI_3_PRO: 'gemini/gemini-3-pro-preview',
   GEMINI_2_5_FLASH: 'gemini/gemini-2.5-flash',
   LLAMA_4_MAVERICK:
     'fireworks_ai/accounts/fireworks/models/llama4-maverick-instruct-basic',
@@ -83,8 +83,8 @@ export default {
           provider: Providers.GOOGLE,
         },
         {
-          value: Models.GEMINI_2_5_PRO,
-          title: 'Gemini 2.5 Pro',
+          value: Models.GEMINI_3_PRO,
+          title: 'Gemini 3 Pro',
           provider: Providers.GOOGLE,
         },
         {
@@ -183,7 +183,7 @@ export default {
         } else if (this.availableProviders.includes(Providers.ANTHROPIC)) {
           this.onModelChange(Models.SONNET_4_5);
         } else if (this.availableProviders.includes(Providers.GOOGLE)) {
-          this.onModelChange(Models.GEMINI_2_5_PRO);
+          this.onModelChange(Models.GEMINI_3_PRO);
         } else if (this.availableProviders.includes(Providers.FIREWORKS_AI)) {
           this.onModelChange(Models.DEEPSEEK_V3_1);
         }
