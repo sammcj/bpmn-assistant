@@ -13,7 +13,7 @@ class AnthropicModels(Enum):
 
 class GoogleModels(Enum):
     GEMINI_2_5_FLASH = "gemini/gemini-2.5-flash"
-    GEMINI_3_PRO = "gemini/gemini-3-pro-preview"
+    GEMINI_2_5_PRO = "gemini/gemini-2.5-pro"
 
 
 class FireworksAIModels(Enum):

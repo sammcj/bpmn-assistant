@@ -99,7 +99,7 @@ Additional prerequisites for local deployment:
 ### Google
 
 * Gemini 2.5 Flash
-* Gemini 3 Pro (recommended)
+* Gemini 2.5 Pro (recommended)
 
 ### Fireworks AI
 
