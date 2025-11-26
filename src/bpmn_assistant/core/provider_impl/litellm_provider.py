@@ -27,9 +27,7 @@ class LiteLLMProvider(LLMProvider):
         """Check if the given model is an OpenAI model."""
         return model in [m.value for m in OpenAIModels]
 
-    def _validate_vision_support(
-        self, model: str, messages: list[dict[str, Any]]
-    ) -> None:
+    def _validate_vision_support(self, model: str, messages: list[dict[str, Any]]) -> None:
         """
         Validate that only vision-supported models receive image content.
         Raises ValueError if images are sent to non-OpenAI models.
@@ -66,12 +64,8 @@ class LiteLLMProvider(LLMProvider):
 
         params["max_tokens"] = max_tokens
 
-        # GPT-5 models only support temperature=1; for Gemini 3 it is recommended
-        if model in [
-            OpenAIModels.GPT_5_1.value,
-            OpenAIModels.GPT_5_MINI.value,
-            GoogleModels.GEMINI_3_PRO.value,
-        ]:
+        # GPT-5 models only support temperature=1
+        if model in [OpenAIModels.GPT_5_1.value, OpenAIModels.GPT_5_MINI.value]:
             params["temperature"] = 1
         else:
             params["temperature"] = temperature
