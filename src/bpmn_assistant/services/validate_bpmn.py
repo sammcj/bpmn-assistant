@@ -2,6 +2,7 @@ from pydantic import ValidationError
 
 from bpmn_assistant.core.enums import BPMNElementType
 from bpmn_assistant.core.schemas import BPMNTask, ExclusiveGateway, InclusiveGateway, ParallelGateway
+from bpmn_assistant.services.bpmn_process_transformer import BpmnProcessTransformer
 
 
 def validate_bpmn(process: list, is_top_level: bool = True) -> None:
@@ -40,6 +41,12 @@ def validate_bpmn(process: list, is_top_level: bool = True) -> None:
     # Check for exactly one start event at the top level
     if is_top_level and start_event_count != 1:
         raise ValueError(f"Process must contain exactly one start event, found {start_event_count}")
+    if is_top_level and not _process_has_end_event(process):
+        raise ValueError("Process must contain at least one end event")
+    if is_top_level:
+        # Ensure the process can be transformed into BPMN XML
+        transformer = BpmnProcessTransformer()
+        transformer.transform(process)
 
 
 def validate_element(element: dict) -> None:
@@ -142,3 +149,21 @@ def _validate_parallel_gateway(element: dict) -> None:
         ParallelGateway.model_validate(element)
     except ValidationError:
         raise ValueError(f"Invalid parallel gateway element: {element}")
+
+def _process_has_end_event(process: list[dict]) -> bool:
+    """Recursively check whether a process (including branches) contains at least one end event."""
+    for element in process:
+        if element["type"] == BPMNElementType.END_EVENT.value:
+            return True
+        if element["type"] in [
+            BPMNElementType.EXCLUSIVE_GATEWAY.value,
+            BPMNElementType.INCLUSIVE_GATEWAY.value
+        ]:
+            for branch in element["branches"]:
+                if _process_has_end_event(branch["path"]):
+                    return True
+        if element["type"] == BPMNElementType.PARALLEL_GATEWAY.value:
+            for branch in element["branches"]:
+                if _process_has_end_event(branch):
+                    return True
+    return False
