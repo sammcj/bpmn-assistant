@@ -9,7 +9,7 @@ from bpmn_assistant.services.process_editing import (
     redirect_branch,
     update_element,
 )
-from bpmn_assistant.services.validate_bpmn import validate_element
+from bpmn_assistant.services.validate_bpmn import validate_element, validate_bpmn
 
 
 class BpmnEditingService:

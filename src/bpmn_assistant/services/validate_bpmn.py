@@ -108,9 +108,18 @@ def _validate_exclusive_gateway(element: dict) -> None:
         raise ValueError(
             f"Exclusive gateway is missing or has invalid 'branches': {element}"
         )
+    branch_paths = []
     for branch in element["branches"]:
         if "condition" not in branch or "path" not in branch:
             raise ValueError(f"Invalid branch in exclusive gateway: {branch}")
+        if not isinstance(branch["path"], list):
+            raise ValueError(f"Exclusive gateway branch 'path' must be a list: {branch}")
+        branch_paths.append(branch["path"])
+
+    if branch_paths and all(len(path) == 0 for path in branch_paths):
+        raise ValueError(
+            "Exclusive gateway must have at least one branch with elements; all branch paths are empty."
+        )
 
     try:
         ExclusiveGateway.model_validate(element)

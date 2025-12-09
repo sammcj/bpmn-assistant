@@ -27,7 +27,9 @@ class LiteLLMProvider(LLMProvider):
         """Check if the given model is an OpenAI model."""
         return model in [m.value for m in OpenAIModels]
 
-    def _validate_vision_support(self, model: str, messages: list[dict[str, Any]]) -> None:
+    def _validate_vision_support(
+        self, model: str, messages: list[dict[str, Any]]
+    ) -> None:
         """
         Validate that only vision-supported models receive image content.
         Raises ValueError if images are sent to non-OpenAI models.
@@ -69,6 +71,10 @@ class LiteLLMProvider(LLMProvider):
             params["temperature"] = 1
         else:
             params["temperature"] = temperature
+
+        logger.debug(
+            f"Sending prompt (model={model}): {json.dumps(messages, indent=2)}"
+        )
 
         response = completion(**params)
 
